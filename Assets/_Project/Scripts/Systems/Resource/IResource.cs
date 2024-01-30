@@ -5,6 +5,7 @@ namespace Game
     public interface IResource
     {
         Transform Anchor { get; }
-        void MarkAsProcessed();
+        void MarkAsDetected();
+        void Collect();
     }
 }

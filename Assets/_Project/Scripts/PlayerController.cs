@@ -22,8 +22,13 @@ namespace Game
             var directionClamped = Vector3.ClampMagnitude(localDirection, 1f);
 
             var newPosition = transform.position + directionClamped * (_settings.Speed * Time.deltaTime);
-            
-            transform.position = _ground.GetClosestPoint(newPosition);
+
+            _ground.TryGetClosestPoint(newPosition, out var closestPoint);
+            transform.position = closestPoint;
+            if (directionClamped != Vector3.zero)
+            {
+                transform.localRotation = Quaternion.LookRotation(directionClamped, Vector3.up);
+            }
         }
     }
 }

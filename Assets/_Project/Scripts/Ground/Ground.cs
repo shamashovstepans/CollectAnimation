@@ -7,7 +7,7 @@ namespace Game.Ground
     internal class Ground : MonoBehaviour, IGround
     {
         [SerializeField] private float _borderPadding;
-        
+
         [OnValueChanged("OnValueChanged")]
         [SerializeField] private float _width;
         [OnValueChanged("OnValueChanged")]
@@ -46,9 +46,10 @@ namespace Game.Ground
             OnValueChanged();
         }
 
-        public Vector3 GetClosestPoint(Vector3 position)
+        public bool TryGetClosestPoint(Vector3 position, out Vector3 closestPoint)
         {
-            return _bounds.ClosestPoint(position);
+            closestPoint = _bounds.ClosestPoint(position);
+            return _bounds.Contains(position);
         }
     }
 }

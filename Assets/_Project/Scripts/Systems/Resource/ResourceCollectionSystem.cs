@@ -51,8 +51,10 @@ namespace Game
         {
             try
             {
-                using var task = new ResourceCollectionTask(resource.Anchor, collector.Anchor, _settings);
+                resource.MarkAsDetected();
+                using var task = new ResourceCollectionTask(resource.Anchor, collector.Anchor, collector.ControlPoint, _settings);
                 await task.ExecuteAsync(_lifetimeToken.Token);
+                resource.Collect();
             }
             catch (OperationCanceledException)
             {

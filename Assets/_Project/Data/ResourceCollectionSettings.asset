@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295453005bf84edba6e23a41d3d01bf1, type: 3}
   m_Name: ResourceCollectionSettings
   m_EditorClassIdentifier: 
-  _flyRadius: 2
-  _flySpeed: 10
+  _flyRadius: 4
+  _flyTime: 1
+  _spawnRadius: 0.5
+  _spawnInterval: 0.02
+  _resourcePrefab: {fileID: 5559640567067214708, guid: 4400c35a7098149ec85c9e2c2a3e89fe,
+    type: 3}

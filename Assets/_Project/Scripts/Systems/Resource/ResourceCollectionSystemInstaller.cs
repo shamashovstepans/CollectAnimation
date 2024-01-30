@@ -10,6 +10,7 @@ namespace Game
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<ResourceCollectionSystem>().AsSingle().WithArguments(_settings);
+            Container.BindInterfacesTo<ResourceSpawner>().AsSingle().WithArguments(_settings);
         }
     }
 }

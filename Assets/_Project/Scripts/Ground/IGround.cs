@@ -4,6 +4,6 @@ namespace Game.Ground
 {
     public interface IGround
     {
-        Vector3 GetClosestPoint(Vector3 position);
+        bool TryGetClosestPoint(Vector3 position, out Vector3 closestPoint);
     }
 }
