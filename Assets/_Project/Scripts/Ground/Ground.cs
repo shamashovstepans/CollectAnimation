@@ -51,5 +51,16 @@ namespace Game.Ground
             closestPoint = _bounds.ClosestPoint(position);
             return _bounds.Contains(position);
         }
+
+        public Vector3 GetRandomPoint()
+        {
+            var randomPoint = new Vector3(
+                Random.Range(-_width / 2f, _width / 2f),
+                0f,
+                Random.Range(-_lenght / 2f, _lenght / 2f)
+            );
+
+            return randomPoint;
+        }
     }
 }

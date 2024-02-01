@@ -48,6 +48,10 @@ namespace Game
 
             foreach (var resource in _resources)
             {
+                if (resource == null)
+                {
+                    continue;
+                }
                 resource.Collected -= OnResourceCollected;
                 Object.Destroy(resource.gameObject);
             }
@@ -57,11 +61,6 @@ namespace Game
 
         public void Tick()
         {
-            if (!_isPointerDown)
-            {
-                return;
-            }
-
             _timeSinceLastSpawn += Time.deltaTime;
 
             if (_timeSinceLastSpawn < _settings.SpawnInterval)
@@ -69,16 +68,30 @@ namespace Game
                 return;
             }
 
-            var randomPosition = Random.insideUnitCircle * _settings.SpawnRadius;
-            var spawnPosition = new Vector3(randomPosition.x, 0f, randomPosition.y) + _pointerPosition;
-
-            if (!_ground.TryGetClosestPoint(spawnPosition, out var closestPoint))
+            if (_isPointerDown)
             {
-                return;
-            }
+                var randomPosition = Random.insideUnitCircle * _settings.SpawnRadius;
+                var spawnPosition = new Vector3(randomPosition.x, 0f, randomPosition.y) + _pointerPosition;
 
-            SpawnResource(closestPoint);
-            _timeSinceLastSpawn = 0f;
+                if (!_ground.TryGetClosestPoint(spawnPosition, out var closestPoint))
+                {
+                    return;
+                }
+
+                SpawnResource(closestPoint);
+                _timeSinceLastSpawn = 0f;
+            }
+            else
+            {
+                if (_resources.Count >= _settings.MaxResources)
+                {
+                    return;
+                }
+
+                var randomPosition = _ground.GetRandomPoint();
+                SpawnResource(randomPosition);
+                _timeSinceLastSpawn = 0f;
+            }
         }
 
         private void SpawnResource(Vector3 position)

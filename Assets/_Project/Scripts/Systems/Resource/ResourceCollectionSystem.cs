@@ -52,9 +52,10 @@ namespace Game
             try
             {
                 resource.MarkAsDetected();
-                using var task = new ResourceCollectionTask(resource.Anchor, collector.Anchor, collector.ControlPoint, _settings);
+                using var task = new ResourceCollectionTask(resource.Anchor, collector.Anchor, collector.RandomControlPoint, _settings);
                 await task.ExecuteAsync(_lifetimeToken.Token);
                 resource.Collect();
+                collector.NotifyCollected(resource);
             }
             catch (OperationCanceledException)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Game
@@ -41,8 +42,9 @@ namespace Game
 
                 var distanceToMove = _settings.FlySpeed * Time.deltaTime;
                 timePassed += GetTIncrement(timePassed, distanceToMove, curveLength);
-                timePassed = Mathf.Clamp01(timePassed); // Ensure t stays between 0 and 1
-                var position = MoveAlongCurve(timePassed);
+                timePassed = Mathf.Clamp01(timePassed);
+                var easedTime = DOVirtual.EasedValue(0f, 1f, timePassed, _settings.Ease);
+                var position = MoveAlongCurve(easedTime);
                 _resource.position = position;
 
                 await Task.Yield();

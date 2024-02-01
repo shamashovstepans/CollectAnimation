@@ -7,6 +7,7 @@ namespace Game
     {
         event Action<IResourceCollector, IResource> ResourceDetected; 
         Transform Anchor { get; }
-        Transform ControlPoint { get; }
+        Transform RandomControlPoint { get; }
+        void NotifyCollected(IResource resource);
     }
 }
