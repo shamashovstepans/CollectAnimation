@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118de9c272284d41bd5516145e9a53b7, type: 3}
   m_Name: BounceSettings
   m_EditorClassIdentifier: 
-  _timeToBounce: 0.05
-  _magnitude: 0.05
+  _timeToBounce: 0
+  _magnitude: 0
   _bounceEase: 1

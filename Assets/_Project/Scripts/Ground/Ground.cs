@@ -62,5 +62,33 @@ namespace Game.Ground
 
             return randomPoint;
         }
+
+        public Vector3 GetRandomBorderPoint()
+        {
+            var randomPoint = new Vector3(
+                Random.Range(-_width / 2f, _width / 2f),
+                0f,
+                Random.Range(-_lenght / 2f, _lenght / 2f)
+            );
+
+            var randomBorder = Random.Range(0, 4);
+            switch (randomBorder)
+            {
+                case 0:
+                    randomPoint.x = -_width / 2f;
+                    break;
+                case 1:
+                    randomPoint.x = _width / 2f;
+                    break;
+                case 2:
+                    randomPoint.z = -_lenght / 2f;
+                    break;
+                case 3:
+                    randomPoint.z = _lenght / 2f;
+                    break;
+            }
+
+            return randomPoint;
+        }
     }
 }
