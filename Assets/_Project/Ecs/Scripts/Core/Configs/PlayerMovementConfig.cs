@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace _Project.Scripts.Ecs.Configs
 {
-    [CreateAssetMenu]
     public class PlayerMovementConfig : EcsConfig
     {
         [SerializeField] private float _speed;

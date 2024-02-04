@@ -27,6 +27,7 @@ namespace _Project.Scripts.Ecs.Core.Installer
             Container.Bind<IEcsSystem>().To<SyncTransformSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<UpdateRigidbodySystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<EnemySpawnerSystem>().AsSingle();
         }
     }
 }

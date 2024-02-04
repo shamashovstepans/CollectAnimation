@@ -9,6 +9,8 @@ namespace _Project.Scripts.Ecs.View
         [SerializeField] private Transform _transform = default;
         [SerializeField] private Rigidbody _rigidbody = default;
 
+        [SerializeField] private float _rotationSpeed = 1f;
+
         public ObjectTransform GetTransform()
         {
             return new ObjectTransform
@@ -18,9 +20,15 @@ namespace _Project.Scripts.Ecs.View
             };
         }
 
-        public void Move(Vector3 deltaMovement)
+        public void SetVelocity(Vector3 velocity)
         {
-            _rigidbody.MovePosition(_rigidbody.position + deltaMovement);
+            _rigidbody.velocity = velocity;
+            _rigidbody.angularVelocity = Vector3.zero;
+            
+            if (velocity != Vector3.zero)
+            {
+                _rigidbody.rotation = Quaternion.Lerp(_rigidbody.rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationSpeed);
+            }
         }
     }
 }

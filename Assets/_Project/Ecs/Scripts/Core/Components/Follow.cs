@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace _Project.Scripts.Ecs.Components
 {
-    internal struct PlayerInput
+    public struct Follow
     {
-        public Vector2 MovementInput;
+        public Vector3 TargetPosition;
     }
 }

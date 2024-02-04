@@ -27,7 +27,7 @@ namespace _Project.Scripts.Ecs.Systems
                 var objectRigidbody = _objectRigidbodyPool.Get(entity);
                 ref var physicalBody = ref _physicalBodyPool.Get(entity);
 
-                physicalBody.View.Move(objectRigidbody.DeltaMovement);
+                physicalBody.View.SetVelocity(objectRigidbody.Velocity);
             }
         }
     }

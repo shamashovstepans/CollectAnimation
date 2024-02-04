@@ -35,11 +35,11 @@ namespace _Project.Scripts.Ecs.Systems
                 var playerInput = _playerInputPool.Get(entity);
                 ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
 
-                var worldInput = new Vector3(playerInput.Movement.x, 0, playerInput.Movement.y);
-                var deltaMovement = worldInput  * _config.Speed * Time.fixedDeltaTime;
+                var worldInput = new Vector3(playerInput.MovementInput.x, 0, playerInput.MovementInput.y);
+                var deltaMovement = worldInput  * _config.Speed;
                 objectRigidbody = new ObjectRigidbody
                 {
-                    DeltaMovement = deltaMovement
+                    Velocity = deltaMovement
                 };
             }
         }
