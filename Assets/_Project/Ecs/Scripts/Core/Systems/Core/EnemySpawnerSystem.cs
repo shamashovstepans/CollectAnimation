@@ -14,7 +14,7 @@ namespace _Project.Scripts.Ecs.Systems
 
         private EcsWorld _world;
         private EcsPool<EnemyTag> _enemyTagPool;
-        private EcsPool<Follow> _followPool;
+        private EcsPool<FollowTarget> _followPool;
         private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
@@ -31,7 +31,7 @@ namespace _Project.Scripts.Ecs.Systems
         {
             _world = systems.GetWorld();
             _enemyTagPool = _world.GetPool<EnemyTag>();
-            _followPool = _world.GetPool<Follow>();
+            _followPool = _world.GetPool<FollowTarget>();
             _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
@@ -56,7 +56,7 @@ namespace _Project.Scripts.Ecs.Systems
 
             var spawnPosition = _worldView.GetRandomBorderPoint();
             var prefab = _config.EnemyPrefab;
-            var view = Object.Instantiate(prefab, spawnPosition, Quaternion.identity);
+            var view = Object.Instantiate(prefab, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
             var physicalBodyView = view.GetComponent<IEcsPhysicalBodyView>();
 
             _objectTransformPool.Add(enemy);

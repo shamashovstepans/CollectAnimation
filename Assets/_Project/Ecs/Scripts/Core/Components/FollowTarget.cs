@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Ecs.Components
 {
-    public struct Follow
+    public struct FollowTarget
     {
         public Vector3 TargetPosition;
     }

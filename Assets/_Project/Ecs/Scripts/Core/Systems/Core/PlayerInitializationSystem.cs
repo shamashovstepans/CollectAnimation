@@ -16,7 +16,8 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<PlayerInput> _playerInputPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
-        
+        private EcsPool<PlayerTag> _playerTagPool;
+
         private IEcsPhysicalBodyView _playerView;
         
         private GameObject _playerObject;
@@ -36,6 +37,7 @@ namespace _Project.Scripts.Ecs.Systems
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _playerInputPool = _world.GetPool<PlayerInput>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
+            _playerTagPool = _world.GetPool<PlayerTag>();
             
             var entity = _world.NewEntity();
 
@@ -46,6 +48,7 @@ namespace _Project.Scripts.Ecs.Systems
             _objectTransformPool.Add(entity);
             _objectRigidbodyPool.Add(entity);
             _playerInputPool.Add(entity);
+            _playerTagPool.Add(entity);
         }
 
         public void Destroy(EcsSystems systems)
