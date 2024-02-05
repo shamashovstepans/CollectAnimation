@@ -12,16 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295453005bf84edba6e23a41d3d01bf1, type: 3}
   m_Name: ResourceCollectionSettings
   m_EditorClassIdentifier: 
-  _flyRadius: 4
   _flySpeed: 3
   _spawnRadius: 0.5
   _spawnInterval: 0.02
   _resourcePrefab: {fileID: 5559640567067214708, guid: 4400c35a7098149ec85c9e2c2a3e89fe,
     type: 3}
   _maxResources: 400
-  _ease: 10
+  _ease: 3
   _controlPointFollowSpeed: 3
-  _controlPointsCount: 14
-  _maxAngle: 120
-  _radius: 3.47
-  _height: 1
+  _controlPointsCount: 50
+  _maxAngle: 360
+  _radius: 4
+  _height: 3

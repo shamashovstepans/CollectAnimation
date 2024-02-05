@@ -34,13 +34,12 @@ namespace _Project.Scripts.Ecs.Core.Installer
 
         private void BindCoreSystems()
         {
-            Container.Bind<IEcsSystem>().To<EcsWorldDebugSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerInitializationSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<EnemySpawnerSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<PlayerInputSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<PlayerTargetingSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<PlayerTargetRemovalSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerTargetSelectionSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<EnemyTargetSelectionSystem>().AsSingle();

@@ -51,6 +51,7 @@ namespace Game.Systems.Enemy
 
         public void Tick()
         {
+            return;
             _timeSinceLastSpawn -= Time.deltaTime;
 
             if (_timeSinceLastSpawn > 0)

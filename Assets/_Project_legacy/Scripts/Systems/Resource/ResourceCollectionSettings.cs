@@ -10,7 +10,6 @@ namespace Game
     {
         public event Action Updated;
 
-        [SerializeField] private float _flyRadius;
         [SerializeField] private float _flySpeed = 5f;
 
         [SerializeField] private float _spawnRadius;
@@ -31,7 +30,6 @@ namespace Game
         [OnValueChanged("OnValidate")]
         [SerializeField] private float _height = 1f;
 
-        public float FlyRadius => _flyRadius;
         public float FlySpeed => _flySpeed;
 
         public float SpawnRadius => _spawnRadius;

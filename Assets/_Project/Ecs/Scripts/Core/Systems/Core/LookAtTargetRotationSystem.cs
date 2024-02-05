@@ -1,4 +1,5 @@
 using _Project.Scripts.Ecs.Components;
+using _Project.Scripts.Ecs.Configs;
 using _Project.Scripts.Ecs.Core.Common;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -7,10 +8,17 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
 {
     internal class LookAtTargetRotationSystem : IEcsInitSystem, IEcsCoreRunSystem
     {
+        private readonly RotationConfig _rotationConfig;
+        
         private EcsWorld _world;
         private EcsFilter _filter;
         private EcsPool<LookAtTarget> _lookAtTargetPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
+
+        public LookAtTargetRotationSystem(RotationConfig rotationConfig)
+        {
+            _rotationConfig = rotationConfig;
+        }
 
         public void Init(IEcsSystems systems)
         {
@@ -30,7 +38,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 var direction = lookAtTarget.TargetPosition - objectTransform.Position;
                 if (direction != Vector3.zero)
                 {
-                    objectTransform.Rotation = Quaternion.LookRotation(direction);
+                    objectTransform.Rotation = Quaternion.Lerp(objectTransform.Rotation, Quaternion.LookRotation(direction), Time.deltaTime * _rotationConfig.RotationSpeed);
                 }
             }
         }

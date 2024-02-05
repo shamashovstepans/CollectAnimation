@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
+using Leopotam.EcsLite.UnityEditor;
 using Zenject;
 
 namespace _Project.Scripts.Ecs.Core.Common
@@ -16,6 +17,8 @@ namespace _Project.Scripts.Ecs.Core.Common
         private readonly List<IEcsCoreRunSystem> _coreRunSystems = new();
         private readonly List<IEcsPhysicsRunSystem> _physicsRunSystems = new();
         private readonly List<IEcsDestroySystem> _destroySystems = new();
+        
+        private readonly EcsWorldDebugSystem _debugSystem = new();
 
         public EcsRunner(EcsWorld world, List<IEcsSystem> systemsToRegister)
         {
@@ -47,8 +50,14 @@ namespace _Project.Scripts.Ecs.Core.Common
 
                 _systems.Add(ecsSystem);
             }
+            
+            _systems.Add(_debugSystem);
 
             _systemsToRegister.Clear();
+            
+            _world.AddEventListener(_debugSystem);
+            
+            _debugSystem.PreInit(_systems);
 
             foreach (var system in _initSystems)
             {
@@ -62,6 +71,8 @@ namespace _Project.Scripts.Ecs.Core.Common
             {
                 system.Run(_systems);
             }
+            
+            _debugSystem.Run(_systems);
         }
 
         public void FixedTick()
@@ -74,6 +85,8 @@ namespace _Project.Scripts.Ecs.Core.Common
 
         public void Dispose()
         {
+            _world.RemoveEventListener(_debugSystem);
+            
             foreach (var system in _destroySystems)
             {
                 system.Destroy(_systems);

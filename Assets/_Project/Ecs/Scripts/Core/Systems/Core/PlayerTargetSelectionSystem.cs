@@ -1,6 +1,7 @@
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Core.Common;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace _Project.Ecs.Scripts.Core.Systems.Core
 {
@@ -15,7 +16,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _playerFilter = _world.Filter<PlayerTag>().Inc<ObjectTransform>().Inc<LookAtTarget>().End();
+            _playerFilter = _world.Filter<PlayerTag>().Inc<ObjectTransform>().Inc<Standing>().End();
             _enemiesFilter = _world.Filter<EnemyTag>().Inc<ObjectTransform>().End();
             _lookAtTargetPool = _world.GetPool<LookAtTarget>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
@@ -26,8 +27,9 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             foreach (var playerEntity in _playerFilter)
             {
                 var playerTransform = _objectTransformPool.Get(playerEntity);
-                ref var playerLookAtTarget = ref _lookAtTargetPool.Get(playerEntity);
                 var minDistance = float.MaxValue;
+                Vector3 targetPosition = default;
+                var hasTarget = false;
 
                 foreach (var enemyEntity in _enemiesFilter)
                 {
@@ -36,7 +38,28 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                     if (distance < minDistance)
                     {
                         minDistance = distance;
-                        playerLookAtTarget.TargetPosition = enemyTransform.Position;
+                        targetPosition = enemyTransform.Position;
+                        hasTarget = true;
+                    }
+                }
+                
+                if (hasTarget)
+                {
+                    if (!_lookAtTargetPool.Has(playerEntity))
+                    {
+                        _lookAtTargetPool.Add(playerEntity).TargetPosition = targetPosition;
+                    }
+                    else
+                    {
+                        ref var lookAtTarget = ref _lookAtTargetPool.Get(playerEntity);
+                        lookAtTarget.TargetPosition = targetPosition;
+                    }
+                }
+                else
+                {
+                    if (_lookAtTargetPool.Has(playerEntity))
+                    {
+                        _lookAtTargetPool.Del(playerEntity);
                     }
                 }
             }
