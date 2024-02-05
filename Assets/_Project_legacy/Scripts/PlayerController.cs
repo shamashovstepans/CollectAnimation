@@ -8,7 +8,6 @@ namespace Game
     internal class PlayerController : MonoBehaviour, IPlayer
     {
         private static readonly int IsRunning = Animator.StringToHash("IsRunning");
-        private static readonly int IsShooting = Animator.StringToHash("IsShooting");
 
         [SerializeField] private Transform _worldRotation;
         [SerializeField] private PlayerSettings _settings;
@@ -30,7 +29,6 @@ namespace Game
 
             var isMoving = !Mathf.Approximately(directionClamped.magnitude, 0f);
             _animator.SetBool(IsRunning, isMoving);
-            // _animator.SetBool(IsShooting, !isMoving);
 
             var newPosition = transform.position + directionClamped * (_settings.Speed * Time.deltaTime);
 
