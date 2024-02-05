@@ -19,14 +19,14 @@ namespace _Project.Scripts.Ecs.Systems
             _worldRotation = worldRotation;
         }
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<PlayerInput>().End();
             _playerInputPool = _world.GetPool<PlayerInput>();
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             var horizontal = Input.GetAxisRaw("Horizontal");
             var vertical = Input.GetAxisRaw("Vertical");

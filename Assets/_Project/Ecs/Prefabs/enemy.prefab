@@ -420,7 +420,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _transform: {fileID: 8480579923799184043}
   _rigidbody: {fileID: -7494262407407598461}
-  _rotationSpeed: 15
 --- !u!95 &2864669695707728433
 Animator:
   serializedVersion: 5
@@ -467,7 +466,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!136 &7332278230380279689
 CapsuleCollider:

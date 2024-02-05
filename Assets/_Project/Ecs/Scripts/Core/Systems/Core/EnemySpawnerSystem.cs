@@ -1,9 +1,14 @@
+using System;
+using System.Collections.Generic;
+using _Project.Ecs.Scripts.Core.Common.View;
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Configs;
 using _Project.Scripts.Ecs.Core.Common;
 using _Project.Scripts.Ecs.Dependencies;
+using _Project.Scripts.Ecs.View;
 using Leopotam.EcsLite;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _Project.Scripts.Ecs.Systems
 {
@@ -11,6 +16,7 @@ namespace _Project.Scripts.Ecs.Systems
     {
         private readonly EnemySpawnerConfig _config;
         private readonly IEcsWorldView _worldView;
+        private readonly IViewFactory _viewFactory;
 
         private EcsWorld _world;
         private EcsPool<EnemyTag> _enemyTagPool;
@@ -18,16 +24,18 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
-        
+        private EcsPool<Health> _healthPool;
+
         private float _timeToSpawn;
 
-        public EnemySpawnerSystem(EnemySpawnerConfig config, IEcsWorldView worldView)
+        public EnemySpawnerSystem(EnemySpawnerConfig config, IEcsWorldView worldView, IViewFactory viewFactory)
         {
             _config = config;
             _worldView = worldView;
+            _viewFactory = viewFactory;
         }
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _enemyTagPool = _world.GetPool<EnemyTag>();
@@ -35,14 +43,15 @@ namespace _Project.Scripts.Ecs.Systems
             _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
-            
+            _healthPool = _world.GetPool<Health>();
+
             _timeToSpawn = _config.SpawnInterval;
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             _timeToSpawn -= Time.deltaTime;
-            
+
             if (_timeToSpawn <= 0)
             {
                 _timeToSpawn = _config.SpawnInterval;
@@ -54,17 +63,21 @@ namespace _Project.Scripts.Ecs.Systems
         {
             var enemy = _world.NewEntity();
 
-            var spawnPosition = _worldView.GetRandomBorderPoint();
-            var prefab = _config.EnemyPrefab;
-            var view = Object.Instantiate(prefab, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
-            var physicalBodyView = view.GetComponent<IEcsPhysicalBodyView>();
-
             _objectTransformPool.Add(enemy);
             _enemyTagPool.Add(enemy);
             _followPool.Add(enemy);
             _objectRigidbodyPool.Add(enemy);
             ref var physicalBody = ref _physicalBodyPool.Add(enemy);
+
+            var spawnPosition = _worldView.GetRandomBorderPoint();
+            var view = _viewFactory.Create(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
+
+            var physicalBodyView = view as IEcsPhysicalBodyView;
+            
             physicalBody.View = physicalBodyView;
+            
+            ref var health = ref _healthPool.Add(enemy);
+            health.Value = _config.Health;
         }
     }
 }

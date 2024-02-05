@@ -1,3 +1,4 @@
+using System;
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Dependencies;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace _Project.Scripts.Ecs.View
         [SerializeField] private Transform _transform = default;
         [SerializeField] private Rigidbody _rigidbody = default;
 
-        [SerializeField] private float _rotationSpeed = 1f;
+        public Guid Id { get; } = Guid.NewGuid();
 
         public ObjectTransform GetTransform()
         {
@@ -24,11 +25,11 @@ namespace _Project.Scripts.Ecs.View
         {
             _rigidbody.velocity = velocity;
             _rigidbody.angularVelocity = Vector3.zero;
-            
-            if (velocity != Vector3.zero)
-            {
-                _rigidbody.rotation = Quaternion.Lerp(_rigidbody.rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationSpeed);
-            }
+        }
+
+        public void SetRotation(Quaternion rotation)
+        {
+            _rigidbody.rotation = rotation.normalized;
         }
     }
 }

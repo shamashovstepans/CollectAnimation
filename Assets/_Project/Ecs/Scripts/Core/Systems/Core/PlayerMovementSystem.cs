@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class PlayerMovementSystem : IEcsPhysicsRunSystem, IEcsInitSystem
+    internal class PlayerMovementSystem : IEcsCoreRunSystem, IEcsInitSystem
     {
         private readonly PlayerMovementConfig _config;
 
@@ -20,7 +20,7 @@ namespace _Project.Scripts.Ecs.Systems
             _config = config;
         }
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<PlayerInput>().Inc<ObjectRigidbody>().End();
@@ -28,7 +28,7 @@ namespace _Project.Scripts.Ecs.Systems
             _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             foreach (var entity in _filter)
             {

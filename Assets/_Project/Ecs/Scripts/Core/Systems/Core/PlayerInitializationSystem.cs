@@ -17,9 +17,8 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<PlayerInput> _playerInputPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<PlayerTag> _playerTagPool;
+        private EcsPool<Health> _healthPool;
 
-        private IEcsPhysicalBodyView _playerView;
-        
         private GameObject _playerObject;
 
         public PlayerInitializationSystem(
@@ -30,7 +29,7 @@ namespace _Project.Scripts.Ecs.Systems
             _playerConfig = playerConfig;
         }
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
@@ -38,6 +37,7 @@ namespace _Project.Scripts.Ecs.Systems
             _playerInputPool = _world.GetPool<PlayerInput>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
             _playerTagPool = _world.GetPool<PlayerTag>();
+            _healthPool = _world.GetPool<Health>();
             
             var entity = _world.NewEntity();
 
@@ -49,9 +49,12 @@ namespace _Project.Scripts.Ecs.Systems
             _objectRigidbodyPool.Add(entity);
             _playerInputPool.Add(entity);
             _playerTagPool.Add(entity);
+            
+            ref var health = ref _healthPool.Add(entity);
+            health.Value = _playerConfig.Health;
         }
 
-        public void Destroy(EcsSystems systems)
+        public void Destroy(IEcsSystems systems)
         {
             Object.Destroy(_playerObject);
             _playerObject = null;

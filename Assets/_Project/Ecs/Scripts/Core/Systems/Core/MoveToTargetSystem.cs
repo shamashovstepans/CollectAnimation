@@ -5,7 +5,7 @@ using Leopotam.EcsLite;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class FollowTargetSystem : IEcsInitSystem, IEcsPhysicsRunSystem
+    internal class MoveToTargetSystem : IEcsInitSystem, IEcsCoreRunSystem
     {
         private readonly FollowTargetConfig _config;
 
@@ -15,12 +15,12 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
 
-        public FollowTargetSystem(FollowTargetConfig config)
+        public MoveToTargetSystem(FollowTargetConfig config)
         {
             _config = config;
         }
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _followersFilter = _world.Filter<FollowTarget>().Inc<ObjectRigidbody>().Inc<ObjectTransform>().End();
@@ -29,7 +29,7 @@ namespace _Project.Scripts.Ecs.Systems
             _objectTransformPool = _world.GetPool<ObjectTransform>();
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             foreach (var followerEntity in _followersFilter)
             {

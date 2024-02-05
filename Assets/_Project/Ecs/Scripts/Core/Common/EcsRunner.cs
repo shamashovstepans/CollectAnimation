@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.ExtendedSystems;
 using Zenject;
 
 namespace _Project.Scripts.Ecs.Core.Common
@@ -16,9 +17,9 @@ namespace _Project.Scripts.Ecs.Core.Common
         private readonly List<IEcsPhysicsRunSystem> _physicsRunSystems = new();
         private readonly List<IEcsDestroySystem> _destroySystems = new();
 
-        public EcsRunner(List<IEcsSystem> systemsToRegister)
+        public EcsRunner(EcsWorld world, List<IEcsSystem> systemsToRegister)
         {
-            _world = new EcsWorld();
+            _world = world;
             _systems = new EcsSystems(_world);
             _systemsToRegister = systemsToRegister;
         }
@@ -43,6 +44,8 @@ namespace _Project.Scripts.Ecs.Core.Common
                 {
                     _destroySystems.Add(destroySystem);
                 }
+
+                _systems.Add(ecsSystem);
             }
 
             _systemsToRegister.Clear();

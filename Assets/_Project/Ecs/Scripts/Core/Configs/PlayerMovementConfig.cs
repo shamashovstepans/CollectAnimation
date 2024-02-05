@@ -5,7 +5,7 @@ namespace _Project.Scripts.Ecs.Configs
 {
     public class PlayerMovementConfig : EcsConfig
     {
-        [SerializeField] private float _speed;
+        [SerializeField] private float _speed = 5;
         
         public float Speed => _speed;
     }

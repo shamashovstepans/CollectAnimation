@@ -4,14 +4,14 @@ using Leopotam.EcsLite;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class SyncTransformSystem : IEcsInitSystem, IEcsCoreRunSystem
+    internal class SyncTransformsSystem : IEcsInitSystem, IEcsCoreRunSystem
     {
         private EcsWorld _world;
         private EcsFilter _filter;
         private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<ObjectTransform>().Inc<PhysicalBody>().End();
@@ -19,7 +19,7 @@ namespace _Project.Scripts.Ecs.Systems
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             foreach (var entity in _filter)
             {

@@ -4,7 +4,7 @@ using Leopotam.EcsLite;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class EnemyFollowTargetSelectionSystem : IEcsInitSystem, IEcsCoreRunSystem
+    internal class EnemyTargetSelectionSystem : IEcsInitSystem, IEcsCoreRunSystem
     {
         private EcsWorld _world;
         private EcsFilter _playerFilter;
@@ -12,7 +12,7 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<FollowTarget> _followPool;
 
-        public void Init(EcsSystems systems)
+        public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _playerFilter = _world.Filter<ObjectTransform>().Inc<PlayerTag>().End();
@@ -21,7 +21,7 @@ namespace _Project.Scripts.Ecs.Systems
             _followPool = _world.GetPool<FollowTarget>();
         }
 
-        public void Run(EcsSystems systems)
+        public void Run(IEcsSystems systems)
         {
             foreach (var playerEntity in _playerFilter)
             {

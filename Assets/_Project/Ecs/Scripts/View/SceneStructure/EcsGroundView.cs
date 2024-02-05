@@ -6,20 +6,20 @@ namespace _Project.Scripts.Ecs.View
 {
     internal class EcsGroundView : MonoBehaviour
     {
-        [SerializeField] private float _borderPadding;
+        [SerializeField] private float _borderPadding = 2f;
 
         [OnValueChanged("OnValueChanged")]
-        [SerializeField] private float _width;
+        [SerializeField] private float _width = 20f;
         [OnValueChanged("OnValueChanged")]
-        [SerializeField] private float _lenght;
+        [SerializeField] private float _lenght = 20f;
         [OnValueChanged("OnValueChanged")]
-        [SerializeField] private float _height;
+        [SerializeField] private float _height = 5;
 
-        [SerializeField] private Transform _groundTransform;
-        [SerializeField] private Transform _leftBorderTransform;
-        [SerializeField] private Transform _rightBorderTransform;
-        [SerializeField] private Transform _topBorderTransform;
-        [SerializeField] private Transform _bottomBorderTransform;
+        [SerializeField] private Transform _groundTransform = default;
+        [SerializeField] private Transform _leftBorderTransform = default;
+        [SerializeField] private Transform _rightBorderTransform = default;
+        [SerializeField] private Transform _topBorderTransform = default;
+        [SerializeField] private Transform _bottomBorderTransform = default;
 
         private Bounds _bounds;
 
