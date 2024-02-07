@@ -12,7 +12,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<Death>().End();
+            _filter = _world.Filter<Clear>().End();
         }
 
         public void Run(IEcsSystems systems)

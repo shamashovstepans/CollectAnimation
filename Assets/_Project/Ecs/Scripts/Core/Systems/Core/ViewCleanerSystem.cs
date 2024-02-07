@@ -20,7 +20,7 @@ namespace _Project.Ecs.Scripts.Core.Common.View
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<EcsGameObject>().Inc<Death>().End();
+            _filter = _world.Filter<EcsGameObject>().Inc<Clear>().End();
             _ecsGameObjectPool = _world.GetPool<EcsGameObject>();
         }
 

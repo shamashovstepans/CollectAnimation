@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class PlayerMovementSystem : IEcsCoreRunSystem, IEcsInitSystem
+    internal class PlayerMovementSystem : IEcsPhysicsRunSystem, IEcsInitSystem
     {
         private readonly PlayerMovementConfig _config;
 

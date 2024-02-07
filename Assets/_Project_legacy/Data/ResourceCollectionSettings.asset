@@ -17,7 +17,7 @@ MonoBehaviour:
   _spawnInterval: 0.02
   _resourcePrefab: {fileID: 5559640567067214708, guid: 4400c35a7098149ec85c9e2c2a3e89fe,
     type: 3}
-  _maxResources: 1
+  _maxResources: 400
   _ease: 3
   _controlPointFollowSpeed: 3
   _controlPointsCount: 50

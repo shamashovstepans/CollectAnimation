@@ -6,6 +6,7 @@ namespace _Project.Scripts.Ecs.Dependencies
     {
         Transform Transform { get; }
         Transform EnemiesParent { get; }
+        Transform BulletsParent { get; }
         Vector3 GetRandomBorderPoint();
     }
 }

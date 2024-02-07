@@ -17,6 +17,9 @@ MonoBehaviour:
     - Key: player
       Value: {fileID: 8222783189853470373, guid: 70e0d75f422e34d4faa1d109653ee522,
         type: 3}
+    - Key: projectile
+      Value: {fileID: 3549384447025873399, guid: 30e0cde9f7cb04105bd279a6d0d8c8b1,
+        type: 3}
     - Key: enemy
       Value: {fileID: 4632524964559336998, guid: 8f5759b3c10cf4201a8ebad1422e1b66,
         type: 3}

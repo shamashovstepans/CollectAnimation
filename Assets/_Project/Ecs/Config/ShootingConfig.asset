@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d462780eb7c469c81157fc713ea0808, type: 3}
-  m_Name: EnemySpawnerConfig
+  m_Script: {fileID: 11500000, guid: 50875389b8b14fa493794c8007171281, type: 3}
+  m_Name: ShootingConfig
   m_EditorClassIdentifier: 
-  _spawnInterval: 1
-  _enemyPrefab: {fileID: 4632524964559336998, guid: 8f5759b3c10cf4201a8ebad1422e1b66,
-    type: 3}
-  _health: 100
+  _damage: 50
+  _cooldown: 0.16
+  _projectileSpeed: 15
+  _bulletLifeTime: 5
+  _bulletSpawnOffset: {x: 0, y: 1, z: 0}

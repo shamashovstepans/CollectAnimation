@@ -4,18 +4,18 @@ using Leopotam.EcsLite;
 
 namespace _Project.Ecs.Scripts.Core.Systems.Core
 {
-    internal class DeathSystem : IEcsInitSystem, IEcsCoreRunSystem
+    internal class CleanDetectionSystem : IEcsInitSystem, IEcsCoreRunSystem
     {
         private EcsWorld _world;
         private EcsFilter _filter;
-        private EcsPool<Death> _deathPool;
+        private EcsPool<Clear> _clearView;
         private EcsPool<Health> _healthPool;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<Health>().End();
-            _deathPool = _world.GetPool<Death>();
+            _clearView = _world.GetPool<Clear>();
             _healthPool = _world.GetPool<Health>();
         }
 
@@ -26,7 +26,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 var health = _healthPool.Get(entity);
                 if (health.Value <= 0)
                 {
-                    _deathPool.Add(entity);
+                    _clearView.Add(entity);
                 }
             }
         }

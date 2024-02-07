@@ -4,5 +4,6 @@ namespace _Project.Scripts.Ecs.View
     {
         public const string Player = "player";
         public const string Enemy = "enemy";
+        public const string Projectile = "projectile";
     }
 }

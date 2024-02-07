@@ -36,7 +36,10 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 ref var objectTransform = ref _objectTransformPool.Get(entity);
 
                 var velocity = objectRigidbody.Velocity;
-                objectTransform.Rotation = Quaternion.Lerp(objectTransform.Rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationConfig.RotationSpeed);
+                if (velocity.sqrMagnitude > 0)
+                {
+                    objectTransform.Rotation = Quaternion.Lerp(objectTransform.Rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationConfig.RotationSpeed);
+                }
             }
         }
     }

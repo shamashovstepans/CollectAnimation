@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using _Project.Ecs.Scripts.Core.Common.View;
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Configs;
@@ -8,7 +6,6 @@ using _Project.Scripts.Ecs.Dependencies;
 using _Project.Scripts.Ecs.View;
 using Leopotam.EcsLite;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace _Project.Scripts.Ecs.Systems
 {
@@ -70,11 +67,9 @@ namespace _Project.Scripts.Ecs.Systems
             ref var physicalBody = ref _physicalBodyPool.Add(enemy);
 
             var spawnPosition = _worldView.GetRandomBorderPoint();
-            var view = _viewFactory.Create(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
+            var view = _viewFactory.Create<IEcsPhysicalBodyView>(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
 
-            var physicalBodyView = view as IEcsPhysicalBodyView;
-            
-            physicalBody.View = physicalBodyView;
+            physicalBody.View = view;
             
             ref var health = ref _healthPool.Add(enemy);
             health.Value = _config.Health;

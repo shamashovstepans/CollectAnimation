@@ -28,10 +28,7 @@ namespace _Project.Ecs.Scripts.Core.Common.View
             _ecsGameObjectPool = _world.GetPool<EcsGameObject>();
         }
 
-        public IView Create(int entity, string name,
-            Vector3 position,
-            Quaternion rotation,
-            Transform parent)
+        public TView Create<TView>(int entity, string name,Vector3 position, Quaternion rotation, Transform parent) where TView : class, IView
         {
             var prefab = _config.GetPrefab(name);
             var gameObject = Object.Instantiate(prefab, position, rotation, parent);
@@ -41,7 +38,7 @@ namespace _Project.Ecs.Scripts.Core.Common.View
             ref var ecsGameObject = ref _ecsGameObjectPool.Add(entity);
             ecsGameObject.View = view;
 
-            return view;
+            return view as TView;
         }
 
         public void Destroy(IView view)

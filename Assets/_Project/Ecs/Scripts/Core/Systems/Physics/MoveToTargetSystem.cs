@@ -5,7 +5,7 @@ using Leopotam.EcsLite;
 
 namespace _Project.Scripts.Ecs.Systems
 {
-    internal class MoveToTargetSystem : IEcsInitSystem, IEcsCoreRunSystem
+    internal class MoveToTargetSystem : IEcsInitSystem, IEcsPhysicsRunSystem
     {
         private readonly FollowTargetConfig _config;
 

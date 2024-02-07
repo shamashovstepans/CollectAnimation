@@ -7,10 +7,12 @@ namespace _Project.Scripts.Ecs.View
     {
         [SerializeField] private Transform _worldTransform = default;
         [SerializeField] private Transform _enemiesParent = default;
+        [SerializeField] private Transform _projectilesParent = default;
         [SerializeField] private EcsGroundView _groundView = default;
 
         public Transform Transform => transform;
         public Transform EnemiesParent => _enemiesParent;
+        public Transform BulletsParent => _projectilesParent;
         public Quaternion Rotation => _worldTransform.rotation;
 
         public Vector3 GetRandomBorderPoint()
