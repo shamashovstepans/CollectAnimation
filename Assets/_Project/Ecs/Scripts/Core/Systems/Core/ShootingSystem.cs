@@ -48,7 +48,14 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         {
             foreach (var shootingEntity in _shootingFilter)
             {
-                var targetEntity = _targetPool.Get(shootingEntity).TargetEntity;
+                var shootingEntityPacked = _world.PackEntity(shootingEntity);
+                var targetEntityPacked = _targetPool.Get(shootingEntity).TargetEntityPacked;
+
+                if (!targetEntityPacked.Unpack(_world, out var targetEntity))
+                {
+                    continue;
+                }
+
                 if (targetEntity < 0)
                 {
                     continue;
@@ -69,12 +76,14 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 var projectileEntity = _world.NewEntity();
 
                 ref var projectile = ref _projectilePool.Add(projectileEntity);
-                projectile.SpawnerEntity = shootingEntity;
+                projectile.SpawnerEntity = shootingEntityPacked;
                 projectile.Damage = _config.Damage;
                 projectile.Speed = _config.Speed;
                 projectile.Lifetime = _config.Lifetime;
                 projectile.StartPosition = shootingTransform.Position;
-                projectile.Target = targetEntity;
+                
+                ref var target = ref _targetPool.Add(projectileEntity);
+                target.TargetEntityPacked = targetEntityPacked;
 
                 ref var projectileTransform = ref _objectTransformPool.Add(projectileEntity);
                 projectileTransform.Position = _objectTransformPool.Get(shootingEntity).Position;

@@ -1,5 +1,5 @@
 using _Project.Ecs.Scripts.Core.Common.View;
-using _Project.Ecs.Scripts.Core.Systems.Core;
+using _Project.Ecs.Scripts.Core.Components;
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Configs;
 using _Project.Scripts.Ecs.Dependencies;
@@ -22,7 +22,7 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<PlayerTag> _playerTagPool;
         private EcsPool<Health> _healthPool;
-        private EcsPool<Target> _targetPool;
+        private EcsPool<FindTarget> _findTargetPool;
 
         public PlayerInitializationSystem(
             PlayerConfig playerConfig,
@@ -43,7 +43,7 @@ namespace _Project.Scripts.Ecs.Systems
             _objectTransformPool = _world.GetPool<ObjectTransform>();
             _playerTagPool = _world.GetPool<PlayerTag>();
             _healthPool = _world.GetPool<Health>();
-            _targetPool = _world.GetPool<Target>();
+            _findTargetPool = _world.GetPool<FindTarget>();
 
             var entity = _world.NewEntity();
 
@@ -55,7 +55,7 @@ namespace _Project.Scripts.Ecs.Systems
             _objectRigidbodyPool.Add(entity);
             _playerInputPool.Add(entity);
             _playerTagPool.Add(entity);
-            _targetPool.Add(entity);
+            _findTargetPool.Add(entity);
 
             ref var health = ref _healthPool.Add(entity);
             health.Value = _playerConfig.Health;

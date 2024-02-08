@@ -40,13 +40,17 @@ namespace _Project.Scripts.Ecs.Core.Installer
             Container.Bind<IEcsSystem>().To<PlayerInputSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerShootingSystem>().AsSingle();
 
-            Container.Bind<IEcsSystem>().To<PlayerTargetSelectionSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<PlayerFindTargetSystem>().AsSingle();
+            
+            Container.Bind<IEcsSystem>().To<TargetValidatorSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<TargetSelectionSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<EnemyTargetSelectionSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<ShootingSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<MovingStateSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<ProjectileHitSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<ProjectileCleanerSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<SyncTransformsSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<CleanDetectionSystem>().AsSingle();

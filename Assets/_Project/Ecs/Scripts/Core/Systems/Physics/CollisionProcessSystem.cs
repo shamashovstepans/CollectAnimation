@@ -29,24 +29,37 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
             {
                 var collisionEvent = _onTriggerEnterPool.Get(collisionEntity);
                 var targetEntity = collisionEvent.collider.gameObject.GetComponentInParent<IView>();
+                
+                if (collisionEvent.senderGameObject == null)
+                {
+                    continue;
+                }
+                
                 var senderEntity = collisionEvent.senderGameObject.GetComponentInParent<IView>();
 
                 if (targetEntity == null || senderEntity == null)
                 {
                     continue;
                 }
-                
+
                 var projectile = _projectilePool.Get(senderEntity.EntityId);
-                
-                if (projectile.SpawnerEntity == targetEntity.EntityId)
+
+                if (!projectile.SpawnerEntity.Unpack(_world, out var spawnerEntity))
+                {
+                    continue;
+                }
+
+                if (spawnerEntity == targetEntity.EntityId)
                 {
                     continue;
                 }
 
                 var projectileHitEntity = _world.NewEntity();
                 ref var projectileHit = ref _projectileHitPool.Add(projectileHitEntity);
-                projectileHit.TargetEntity = targetEntity.EntityId;
-                projectileHit.ProjectileEntity = senderEntity.EntityId;
+                projectileHit.TargetEntity = _world.PackEntity(targetEntity.EntityId);
+                projectileHit.ProjectileEntity = _world.PackEntity(senderEntity.EntityId);
+                
+                collisionEvent.collider.gameObject.SetActive(false);
             }
         }
     }

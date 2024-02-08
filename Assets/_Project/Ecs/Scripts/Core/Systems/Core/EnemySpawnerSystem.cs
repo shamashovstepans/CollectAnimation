@@ -67,6 +67,7 @@ namespace _Project.Scripts.Ecs.Systems
             ref var physicalBody = ref _physicalBodyPool.Add(enemy);
 
             var spawnPosition = _worldView.GetRandomBorderPoint();
+            // var spawnPosition = new Vector3(4, 0, 0);
             var view = _viewFactory.Create<IEcsPhysicalBodyView>(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
 
             objectRigidbody.Position = spawnPosition;

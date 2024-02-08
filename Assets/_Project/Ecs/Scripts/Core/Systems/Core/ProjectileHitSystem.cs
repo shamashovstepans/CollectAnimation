@@ -11,6 +11,8 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsFilter _projectileHitFilter;
         private EcsPool<Clear> _clearPool;
         private EcsPool<ProjectileHit> _projectileHitPool;
+        private EcsPool<Projectile> _projectilePool;
+        private EcsPool<Health> _healthPool;
 
         public void Init(IEcsSystems systems)
         {
@@ -18,6 +20,8 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             _projectileHitFilter = _world.Filter<ProjectileHit>().End();
             _clearPool = _world.GetPool<Clear>();
             _projectileHitPool = _world.GetPool<ProjectileHit>();
+            _healthPool = _world.GetPool<Health>();
+            _projectilePool = _world.GetPool<Projectile>();
         }
 
         public void Run(IEcsSystems systems)
@@ -25,9 +29,35 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             foreach (var hit in _projectileHitFilter)
             {
                 var projectileHit = _projectileHitPool.Get(hit);
-                var projectileEntity = projectileHit.ProjectileEntity;
-                _clearPool.Add(projectileEntity);
+                var projectilePackedEntity = projectileHit.ProjectileEntity;
+
+                if (!projectilePackedEntity.Unpack(_world, out var projectileEntity))
+                {
+                    continue;
+                }
+
+                var projectile = _projectilePool.Get(projectileEntity);
+                var targetPackedEntity = projectileHit.TargetEntity;
+
+                if (!targetPackedEntity.Unpack(_world, out var targetEntity))
+                {
+                    continue;
+                }
+
+                if (!_healthPool.Has(targetEntity))
+                {
+                    continue;
+                }
+
+                ref var health = ref _healthPool.Get(targetEntity);
+                health.Value -= projectile.Damage;
+
+                _clearPool.Add(targetEntity);
                 _clearPool.Add(hit);
+                if (!_clearPool.Has(projectileEntity))
+                {
+                    _clearPool.Add(projectileEntity);
+                }
             }
         }
     }

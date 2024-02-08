@@ -36,9 +36,13 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             {
                 ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
                 var target = _targetPool.Get(entity);
-                if (target.TargetEntity < 0)
+
+                if (!target.TargetEntityPacked.Unpack(_world, out var targetEntity))
+                {
                     continue;
-                var targetTransform = _objectTransformPool.Get(target.TargetEntity);
+                }
+
+                var targetTransform = _objectTransformPool.Get(targetEntity);
 
                 var direction = targetTransform.Position - objectRigidbody.Position;
                 if (direction != Vector3.zero)
