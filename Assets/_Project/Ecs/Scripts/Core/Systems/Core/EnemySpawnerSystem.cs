@@ -60,15 +60,17 @@ namespace _Project.Scripts.Ecs.Systems
         {
             var enemy = _world.NewEntity();
 
-            _objectTransformPool.Add(enemy);
             _enemyTagPool.Add(enemy);
             _followPool.Add(enemy);
-            _objectRigidbodyPool.Add(enemy);
+            ref var objectTransform = ref _objectTransformPool.Add(enemy);
+            ref var objectRigidbody = ref _objectRigidbodyPool.Add(enemy);
             ref var physicalBody = ref _physicalBodyPool.Add(enemy);
 
             var spawnPosition = _worldView.GetRandomBorderPoint();
             var view = _viewFactory.Create<IEcsPhysicalBodyView>(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
 
+            objectRigidbody.Position = spawnPosition;
+            objectTransform.Position = spawnPosition;
             physicalBody.View = view;
             
             ref var health = ref _healthPool.Add(enemy);

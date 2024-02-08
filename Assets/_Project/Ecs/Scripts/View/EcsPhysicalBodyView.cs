@@ -11,6 +11,7 @@ namespace _Project.Scripts.Ecs.View
         [SerializeField] private Rigidbody _rigidbody = default;
 
         public Guid Id { get; } = Guid.NewGuid();
+        public int EntityId { get; set; }
 
         public ObjectTransform GetTransform()
         {
@@ -18,6 +19,16 @@ namespace _Project.Scripts.Ecs.View
             {
                 Position = _transform.position,
                 Rotation = _transform.rotation
+            };
+        }
+
+        public ObjectRigidbody GetRigidbody()
+        {
+            return new ObjectRigidbody
+            {
+                Position = _rigidbody.position,
+                Rotation = _rigidbody.rotation,
+                Velocity = _rigidbody.velocity
             };
         }
 

@@ -69,6 +69,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 var projectileEntity = _world.NewEntity();
 
                 ref var projectile = ref _projectilePool.Add(projectileEntity);
+                projectile.SpawnerEntity = shootingEntity;
                 projectile.Damage = _config.Damage;
                 projectile.Speed = _config.Speed;
                 projectile.Lifetime = _config.Lifetime;

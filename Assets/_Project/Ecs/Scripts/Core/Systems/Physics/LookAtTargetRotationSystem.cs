@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Ecs.Scripts.Core.Systems.Core
 {
-    internal class MovableRotationSystem : IEcsInitSystem, IEcsPhysicsRunSystem
+    internal class LookAtTargetRotationSystem : IEcsInitSystem, IEcsPhysicsRunSystem
     {
         private readonly RotationConfig _rotationConfig;
 
@@ -14,8 +14,9 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsFilter _filter;
         private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<ObjectTransform> _objectTransformPool;
+        private EcsPool<Target> _targetPool;
 
-        public MovableRotationSystem(RotationConfig rotationConfig)
+        public LookAtTargetRotationSystem(RotationConfig rotationConfig)
         {
             _rotationConfig = rotationConfig;
         }
@@ -23,8 +24,9 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<ObjectRigidbody>().Inc<ObjectTransform>().Inc<Moving>().End();
+            _filter = _world.Filter<ObjectRigidbody>().Inc<Target>().Inc<Standing>().End();
             _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
+            _targetPool = _world.GetPool<Target>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();
         }
 
@@ -32,13 +34,16 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         {
             foreach (var entity in _filter)
             {
-                var objectRigidbody = _objectRigidbodyPool.Get(entity);
-                ref var objectTransform = ref _objectTransformPool.Get(entity);
+                ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
+                var target = _targetPool.Get(entity);
+                if (target.TargetEntity < 0)
+                    continue;
+                var targetTransform = _objectTransformPool.Get(target.TargetEntity);
 
-                var velocity = objectRigidbody.Velocity;
-                if (velocity.sqrMagnitude > 0)
+                var direction = targetTransform.Position - objectRigidbody.Position;
+                if (direction != Vector3.zero)
                 {
-                    objectTransform.Rotation = Quaternion.Lerp(objectTransform.Rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationConfig.RotationSpeed);
+                    objectRigidbody.Rotation = Quaternion.Lerp(objectRigidbody.Rotation, Quaternion.LookRotation(direction), Time.deltaTime * _rotationConfig.RotationSpeed);
                 }
             }
         }

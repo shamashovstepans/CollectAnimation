@@ -2,9 +2,9 @@ using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Core.Common;
 using Leopotam.EcsLite;
 
-namespace _Project.Scripts.Ecs.Systems
+namespace _Project.Ecs.Scripts.Core.Systems.Physics
 {
-    internal class UpdateRigidbodySystem : IEcsPhysicsRunSystem, IEcsInitSystem
+    internal class ReadRigidbodySystem : IEcsInitSystem, IEcsPhysicsRunSystem
     {
         private EcsWorld _world;
         private EcsFilter _filter;
@@ -26,8 +26,7 @@ namespace _Project.Scripts.Ecs.Systems
                 ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
                 ref var physicalBody = ref _physicalBodyPool.Get(entity);
 
-                physicalBody.View.SetVelocity(objectRigidbody.Velocity);
-                physicalBody.View.SetRotation(objectRigidbody.Rotation);
+                objectRigidbody = physicalBody.View.GetRigidbody();
             }
         }
     }

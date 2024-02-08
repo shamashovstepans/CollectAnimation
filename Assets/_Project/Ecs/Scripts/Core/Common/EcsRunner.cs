@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LeoEcsPhysics;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
 using Leopotam.EcsLite.UnityEditor;
@@ -11,6 +12,7 @@ namespace _Project.Scripts.Ecs.Core.Common
     {
         private readonly EcsWorld _world;
         private readonly EcsSystems _systems;
+        private readonly EcsSystems _physicsSystems;
         private readonly List<IEcsSystem> _systemsToRegister;
 
         private readonly List<IEcsInitSystem> _initSystems = new();
@@ -24,11 +26,13 @@ namespace _Project.Scripts.Ecs.Core.Common
         {
             _world = world;
             _systems = new EcsSystems(_world);
+            _physicsSystems = new EcsSystems(_world);
             _systemsToRegister = systemsToRegister;
         }
 
         public void Initialize()
         {
+            EcsPhysicsEvents.ecsWorld = _world;
             foreach (var ecsSystem in _systemsToRegister)
             {
                 if (ecsSystem is IEcsInitSystem initSystem)
@@ -52,6 +56,7 @@ namespace _Project.Scripts.Ecs.Core.Common
             }
             
             _systems.Add(_debugSystem);
+            _physicsSystems.DelHerePhysics();
 
             _systemsToRegister.Clear();
             
@@ -63,6 +68,8 @@ namespace _Project.Scripts.Ecs.Core.Common
             {
                 system.Init(_systems);
             }
+            
+            _physicsSystems.Init();
         }
 
         public void Tick()
@@ -81,17 +88,22 @@ namespace _Project.Scripts.Ecs.Core.Common
             {
                 system.Run(_systems);
             }
+            
+            _physicsSystems.Run();
         }
 
         public void Dispose()
         {
+            EcsPhysicsEvents.ecsWorld = null;
             _world.RemoveEventListener(_debugSystem);
             
             foreach (var system in _destroySystems)
             {
                 system.Destroy(_systems);
             }
-
+            
+            _physicsSystems.Destroy();
+            _systems.Destroy();
             _world.Destroy();
         }
     }

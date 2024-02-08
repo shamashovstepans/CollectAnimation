@@ -30,13 +30,13 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 }
             }
             
-            foreach (var entity in _notStandingPlayerFilter)
-            {
-                if (_shootingTagPool.Has(entity))
-                {
-                    _shootingTagPool.Del(entity);
-                }
-            }
+            // foreach (var entity in _notStandingPlayerFilter)
+            // {
+            //     if (_shootingTagPool.Has(entity))
+            //     {
+            //         _shootingTagPool.Del(entity);
+            //     }
+            // }
         }
     }
 }

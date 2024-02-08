@@ -15,7 +15,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _playerFilter = _world.Filter<PlayerTag>().Inc<ObjectTransform>().Inc<Standing>().End();
+            _playerFilter = _world.Filter<PlayerTag>().Inc<ObjectTransform>().End();
             _enemiesFilter = _world.Filter<EnemyTag>().Inc<ObjectTransform>().End();
             _targetPool = _world.GetPool<Target>();
             _objectTransformPool = _world.GetPool<ObjectTransform>();

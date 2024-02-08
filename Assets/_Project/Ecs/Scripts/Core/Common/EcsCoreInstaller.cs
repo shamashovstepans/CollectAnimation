@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using _Project.Ecs.Scripts.Core.Common.View;
 using _Project.Ecs.Scripts.Core.Systems.Core;
+using _Project.Ecs.Scripts.Core.Systems.Physics;
 using _Project.Scripts.Ecs.Core.Common;
 using _Project.Scripts.Ecs.Systems;
 using Leopotam.EcsLite;
-using Leopotam.EcsLite.UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -20,7 +20,7 @@ namespace _Project.Scripts.Ecs.Core.Installer
         {
             Container.BindInstance(new EcsWorld()).AsSingle();
             Container.BindInterfacesTo<ViewFactory>().AsSingle();
-            
+
             Container.BindInterfacesTo<EcsRunner>().AsSingle();
 
             foreach (var config in _configs)
@@ -29,6 +29,7 @@ namespace _Project.Scripts.Ecs.Core.Installer
             }
 
             BindCoreSystems();
+            BindPhysicsSystems();
         }
 
         private void BindCoreSystems()
@@ -37,27 +38,34 @@ namespace _Project.Scripts.Ecs.Core.Installer
             Container.Bind<IEcsSystem>().To<EnemySpawnerSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<PlayerInputSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<PlayerTargetSelectionSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerShootingSystem>().AsSingle();
 
+            Container.Bind<IEcsSystem>().To<PlayerTargetSelectionSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<EnemyTargetSelectionSystem>().AsSingle();
-            
-            Container.Bind<IEcsSystem>().To<ShootingSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<ProjectileMovementSystem>().AsSingle();
-            
-            Container.Bind<IEcsSystem>().To<MovingStateSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<MoveToTargetSystem>().AsSingle();
-            
-            Container.Bind<IEcsSystem>().To<MovableRotationSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<LookAtTargetRotationSystem>().AsSingle();
-            
-            Container.Bind<IEcsSystem>().To<UpdateRigidbodySystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<SyncTransformsSystem>().AsSingle();
 
+            Container.Bind<IEcsSystem>().To<ShootingSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<MovingStateSystem>().AsSingle();
+
+            Container.Bind<IEcsSystem>().To<ProjectileHitSystem>().AsSingle();
+
+            Container.Bind<IEcsSystem>().To<SyncTransformsSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<CleanDetectionSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<ViewCleanerSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<EntityCleanerSystem>().AsSingle();
+        }
+
+        private void BindPhysicsSystems()
+        {
+            Container.Bind<IEcsSystem>().To<ReadRigidbodySystem>().AsSingle();
+
+            Container.Bind<IEcsSystem>().To<LookAtTargetRotationSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<MoveToTargetSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<MovableRotationSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<CollisionProcessSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<ProjectileMovementSystem>().AsSingle();
+
+            Container.Bind<IEcsSystem>().To<UpdateRigidbodySystem>().AsSingle();
         }
     }
 }

@@ -33,6 +33,7 @@ namespace _Project.Ecs.Scripts.Core.Common.View
             var prefab = _config.GetPrefab(name);
             var gameObject = Object.Instantiate(prefab, position, rotation, parent);
             var view = gameObject.GetComponent<IView>();
+            view.EntityId = entity;
             _views.Add(view.Id, gameObject);
 
             ref var ecsGameObject = ref _ecsGameObjectPool.Add(entity);

@@ -37,10 +37,7 @@ namespace _Project.Scripts.Ecs.Systems
 
                 var worldInput = new Vector3(playerInput.MovementInput.x, 0, playerInput.MovementInput.y);
                 var deltaMovement = worldInput  * _config.Speed;
-                objectRigidbody = new ObjectRigidbody
-                {
-                    Velocity = deltaMovement
-                };
+                objectRigidbody.Velocity = deltaMovement;
             }
         }
     }
