@@ -10,14 +10,12 @@ namespace _Project.Scripts.Ecs.Configs
         [SerializeField] private float _damage = 50f;
         [Range(0.05f, 3f)]
         [SerializeField] private float _cooldown = 1f;
-        [SerializeField] private float _projectileSpeed = 10f;
-        [SerializeField] private float _bulletLifeTime = 5f;
         [SerializeField] private Vector3 _bulletSpawnOffset;
+        [SerializeField] private float _launchAngle;
 
         public float Damage => _damage;
         public float Cooldown => _cooldown;
-        public float Speed => _projectileSpeed;
-        public float Lifetime => _bulletLifeTime;
         public Vector3 BulletSpawnOffset => _bulletSpawnOffset;
+        public float LaunchAngle => _launchAngle;
     }
 }

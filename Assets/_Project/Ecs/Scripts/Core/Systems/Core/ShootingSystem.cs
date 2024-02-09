@@ -61,7 +61,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                     continue;
                 }
                 ref var shooting = ref _shootingPool.Get(shootingEntity);
-                
+
                 shooting.CooldownTimer -= Time.deltaTime;
 
                 if (shooting.CooldownTimer > 0)
@@ -78,23 +78,46 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 ref var projectile = ref _projectilePool.Add(projectileEntity);
                 projectile.SpawnerEntity = shootingEntityPacked;
                 projectile.Damage = _config.Damage;
-                projectile.Speed = _config.Speed;
-                projectile.Lifetime = _config.Lifetime;
-                projectile.StartPosition = shootingTransform.Position;
-                
-                ref var target = ref _targetPool.Add(projectileEntity);
-                target.TargetEntityPacked = targetEntityPacked;
 
-                ref var projectileTransform = ref _objectTransformPool.Add(projectileEntity);
-                projectileTransform.Position = _objectTransformPool.Get(shootingEntity).Position;
+                var targetPhysicalBody = _objectRigidbodyPool.Get(targetEntity);
 
-                _objectRigidbodyPool.Add(projectileEntity);
+                var startPosition = shootingTransform.Position + _config.BulletSpawnOffset;
 
-                var projectileView = _viewFactory.Create<IEcsPhysicalBodyView>(projectileEntity, ViewConst.Projectile, shootingTransform.Position + _config.BulletSpawnOffset, Quaternion.identity, _worldView.BulletsParent);
+                // ref var projectileRigidbody = ref _objectRigidbodyPool.Add(projectileEntity);
+                var velocity = GetLaunchVelocity(startPosition, targetPhysicalBody.Position, _config.LaunchAngle);
+                Debug.Log(velocity);
+                // projectileRigidbody.Position = startPosition;
+                // projectileRigidbody.Velocity = velocity;
+
+                var projectileView = _viewFactory.Create<IEcsPhysicalBodyView>(projectileEntity, ViewConst.Projectile, startPosition, Quaternion.identity, _worldView.BulletsParent);
 
                 ref var projectilePhysicalBody = ref _physicalBodyPool.Add(projectileEntity);
                 projectilePhysicalBody.View = projectileView;
+                projectilePhysicalBody.View.SetVelocity(velocity);
             }
+        }
+
+        private Vector3 GetLaunchVelocity(Vector3 startPosition, Vector3 endPosition, float launchAngle)
+        {
+            var projectileXZPos = new Vector3(startPosition.x, 0.0f, startPosition.z);
+            var targetXZPos = new Vector3(endPosition.x, 0.0f, endPosition.z);
+            var rotation = Quaternion.LookRotation(targetXZPos - projectileXZPos);
+
+            // shorthands for the formula
+            var R = Vector3.Distance(projectileXZPos, targetXZPos);
+            var G = UnityEngine.Physics.gravity.y;
+            var tanAlpha = Mathf.Tan(launchAngle * Mathf.Deg2Rad);
+            var H = endPosition.y - startPosition.y;
+
+            // calculate the local space components of the velocity 
+            // required to land the projectile on the target object 
+            var Vz = Mathf.Sqrt(G * R * R / (2.0f * (H - R * tanAlpha)));
+            var Vy = tanAlpha * Vz;
+
+            // create the velocity vector in local space and get it in global space
+            var velocity = rotation * new Vector3(0f, Vy, Vz);
+
+            return velocity;
         }
     }
 }

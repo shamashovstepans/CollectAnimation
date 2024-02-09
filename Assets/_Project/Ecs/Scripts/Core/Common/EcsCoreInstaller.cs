@@ -67,7 +67,7 @@ namespace _Project.Scripts.Ecs.Core.Installer
             Container.Bind<IEcsSystem>().To<MovableRotationSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<CollisionProcessSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<ProjectileMovementSystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<ParabolicProjectileMovementSystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<UpdateRigidbodySystem>().AsSingle();
         }
