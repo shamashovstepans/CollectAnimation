@@ -1,4 +1,5 @@
 using _Project.Ecs.Scripts.Core.Components;
+using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Core.Common;
 using Leopotam.EcsLite;
 
@@ -14,7 +15,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<Target>().End();
+            _filter = _world.Filter<Target>().Inc<PlayerTag>().End();
             _targetPool = _world.GetPool<Target>();
             _findTargetPool = _world.GetPool<FindTarget>();
         }

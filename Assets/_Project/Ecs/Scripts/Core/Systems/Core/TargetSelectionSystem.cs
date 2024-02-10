@@ -13,7 +13,6 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsPool<Target> _targetPool;
         private EcsPool<FindTarget> _findTargetPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
-        private EcsPool<TargetNotFound> _targetNotFoundPool;
 
         public void Init(IEcsSystems systems)
         {
@@ -23,7 +22,6 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             _targetPool = _world.GetPool<Target>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _findTargetPool = _world.GetPool<FindTarget>();
-            _targetNotFoundPool = _world.GetPool<TargetNotFound>();
         }
 
         public void Run(IEcsSystems systems)
@@ -58,11 +56,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 {
                     if (!_findTargetPool.Has(targetFinder))
                     {
-                        _targetPool.Add(targetFinder);
-                    }
-                    if (!_targetNotFoundPool.Has(targetFinder))
-                    {
-                        _targetNotFoundPool.Add(targetFinder);
+                        _findTargetPool.Add(targetFinder);
                     }
                 }
             }

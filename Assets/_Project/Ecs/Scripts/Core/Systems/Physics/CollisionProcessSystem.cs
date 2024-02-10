@@ -28,8 +28,13 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
             foreach (var collisionEntity in _collisionFilter)
             {
                 var collisionEvent = _onTriggerEnterPool.Get(collisionEntity);
+                
+                if (collisionEvent.collider == null || collisionEvent.senderGameObject == null)
+                {
+                    continue;
+                }
+                
                 var targetEntity = collisionEvent.collider.gameObject.GetComponentInParent<IView>();
-
                 var senderEntity = collisionEvent.senderGameObject.GetComponentInParent<IView>();
 
                 if (targetEntity == null || senderEntity == null)
