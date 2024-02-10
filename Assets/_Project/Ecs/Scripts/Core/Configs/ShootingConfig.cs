@@ -10,8 +10,8 @@ namespace _Project.Scripts.Ecs.Configs
         [SerializeField] private float _damage = 50f;
         [Range(0.05f, 3f)]
         [SerializeField] private float _cooldown = 1f;
-        [SerializeField] private Vector3 _bulletSpawnOffset;
-        [SerializeField] private float _launchAngle;
+        [SerializeField] private Vector3 _bulletSpawnOffset = new(0, 1, 0);
+        [SerializeField] private float _launchAngle = 50;
 
         public float Damage => _damage;
         public float Cooldown => _cooldown;

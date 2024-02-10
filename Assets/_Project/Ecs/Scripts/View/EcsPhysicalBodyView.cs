@@ -1,5 +1,4 @@
 using System;
-using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Dependencies;
 using UnityEngine;
 
@@ -12,35 +11,7 @@ namespace _Project.Scripts.Ecs.View
 
         public Guid Id { get; } = Guid.NewGuid();
         public int EntityId { get; set; }
-
-        public ObjectTransform GetTransform()
-        {
-            return new ObjectTransform
-            {
-                Position = _transform.position,
-                Rotation = _transform.rotation
-            };
-        }
-
-        public ObjectRigidbody GetRigidbody()
-        {
-            return new ObjectRigidbody
-            {
-                Position = _rigidbody.position,
-                Rotation = _rigidbody.rotation,
-                Velocity = _rigidbody.velocity
-            };
-        }
-
-        public void SetVelocity(Vector3 velocity)
-        {
-            _rigidbody.velocity = velocity;
-            _rigidbody.angularVelocity = Vector3.zero;
-        }
-
-        public void SetRotation(Quaternion rotation)
-        {
-            _rigidbody.rotation = rotation.normalized;
-        }
+        public Transform Transform => _transform;
+        public Rigidbody Rigidbody => _rigidbody;
     }
 }

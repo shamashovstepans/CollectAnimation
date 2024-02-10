@@ -4,7 +4,7 @@ namespace _Project.Scripts.Ecs.View
 {
     internal class ArrowRotationView : MonoBehaviour 
     {
-        [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private Rigidbody _rigidbody = default;
         
         private void FixedUpdate()
         {

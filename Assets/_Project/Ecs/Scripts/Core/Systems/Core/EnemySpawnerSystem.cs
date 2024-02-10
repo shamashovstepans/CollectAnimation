@@ -18,9 +18,7 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsWorld _world;
         private EcsPool<EnemyTag> _enemyTagPool;
         private EcsPool<FollowTarget> _followPool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<Health> _healthPool;
 
         private float _timeToSpawn;
@@ -37,9 +35,7 @@ namespace _Project.Scripts.Ecs.Systems
             _world = systems.GetWorld();
             _enemyTagPool = _world.GetPool<EnemyTag>();
             _followPool = _world.GetPool<FollowTarget>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
             _healthPool = _world.GetPool<Health>();
 
             _timeToSpawn = _config.SpawnInterval;
@@ -62,17 +58,13 @@ namespace _Project.Scripts.Ecs.Systems
 
             _enemyTagPool.Add(enemy);
             _followPool.Add(enemy);
-            ref var objectTransform = ref _objectTransformPool.Add(enemy);
-            ref var objectRigidbody = ref _objectRigidbodyPool.Add(enemy);
             ref var physicalBody = ref _physicalBodyPool.Add(enemy);
 
             var spawnPosition = _worldView.GetRandomBorderPoint();
-            // var spawnPosition = new Vector3(4, 0, 0);
             var view = _viewFactory.Create<IEcsPhysicalBodyView>(enemy, ViewConst.Enemy, spawnPosition, Quaternion.identity, _worldView.EnemiesParent);
 
-            objectRigidbody.Position = spawnPosition;
-            objectTransform.Position = spawnPosition;
             physicalBody.View = view;
+            physicalBody.Position = spawnPosition;
             
             ref var health = ref _healthPool.Add(enemy);
             health.Value = _config.Health;

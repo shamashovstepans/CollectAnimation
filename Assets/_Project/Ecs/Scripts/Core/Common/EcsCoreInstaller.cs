@@ -52,7 +52,6 @@ namespace _Project.Scripts.Ecs.Core.Installer
             Container.Bind<IEcsSystem>().To<ProjectileHitSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<ProjectileCleanerSystem>().AsSingle();
 
-            Container.Bind<IEcsSystem>().To<SyncTransformsSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<CleanDetectionSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<ViewCleanerSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<EntityCleanerSystem>().AsSingle();
@@ -60,16 +59,13 @@ namespace _Project.Scripts.Ecs.Core.Installer
 
         private void BindPhysicsSystems()
         {
-            Container.Bind<IEcsSystem>().To<ReadRigidbodySystem>().AsSingle();
 
             Container.Bind<IEcsSystem>().To<LookAtTargetRotationSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<MoveToTargetSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<MovableRotationSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<PlayerMovementSystem>().AsSingle();
             Container.Bind<IEcsSystem>().To<CollisionProcessSystem>().AsSingle();
-            Container.Bind<IEcsSystem>().To<ParabolicProjectileMovementSystem>().AsSingle();
-
-            Container.Bind<IEcsSystem>().To<UpdateRigidbodySystem>().AsSingle();
+            Container.Bind<IEcsSystem>().To<LegacyProjectileMovementSystem>().AsSingle();
         }
     }
 }

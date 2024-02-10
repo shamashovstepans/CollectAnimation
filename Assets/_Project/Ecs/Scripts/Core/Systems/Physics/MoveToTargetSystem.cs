@@ -12,8 +12,7 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsWorld _world;
         private EcsFilter _followersFilter;
         private EcsPool<FollowTarget> _followPool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
+        private EcsPool<PhysicalBody> _objectRigidbodyPool;
 
         public MoveToTargetSystem(FollowTargetConfig config)
         {
@@ -23,10 +22,9 @@ namespace _Project.Scripts.Ecs.Systems
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _followersFilter = _world.Filter<FollowTarget>().Inc<ObjectRigidbody>().Inc<ObjectTransform>().End();
+            _followersFilter = _world.Filter<FollowTarget>().Inc<PhysicalBody>().End();
             _followPool = _world.GetPool<FollowTarget>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
+            _objectRigidbodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)
@@ -34,7 +32,7 @@ namespace _Project.Scripts.Ecs.Systems
             foreach (var followerEntity in _followersFilter)
             {
                 var followTarget = _followPool.Get(followerEntity);
-                var objectTransform = _objectTransformPool.Get(followerEntity);
+                var objectTransform = _objectRigidbodyPool.Get(followerEntity);
                 ref var objectRigidbody = ref _objectRigidbodyPool.Get(followerEntity);
 
                 var direction = followTarget.TargetPosition - objectTransform.Position;

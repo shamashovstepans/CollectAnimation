@@ -12,16 +12,16 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsFilter _enemiesFilter;
         private EcsPool<Target> _targetPool;
         private EcsPool<FindTarget> _findTargetPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
+        private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<TargetNotFound> _targetNotFoundPool;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _targetFindersFilter = _world.Filter<FindTarget>().Inc<ObjectTransform>().End();
-            _enemiesFilter = _world.Filter<EnemyTag>().Inc<ObjectTransform>().End();
+            _targetFindersFilter = _world.Filter<FindTarget>().Inc<PhysicalBody>().End();
+            _enemiesFilter = _world.Filter<EnemyTag>().Inc<PhysicalBody>().End();
             _targetPool = _world.GetPool<Target>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
+            _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _findTargetPool = _world.GetPool<FindTarget>();
             _targetNotFoundPool = _world.GetPool<TargetNotFound>();
         }
@@ -30,13 +30,13 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         {
             foreach (var targetFinder in _targetFindersFilter)
             {
-                var finderTransform = _objectTransformPool.Get(targetFinder);
+                var finderTransform = _physicalBodyPool.Get(targetFinder);
                 var minDistance = float.MaxValue;
                 var targetFound = false;
 
                 foreach (var enemyEntity in _enemiesFilter)
                 {
-                    var enemyTransform = _objectTransformPool.Get(enemyEntity);
+                    var enemyTransform = _physicalBodyPool.Get(enemyEntity);
                     var distance = (enemyTransform.Position - finderTransform.Position).sqrMagnitude;
                     if (distance < minDistance)
                     {

@@ -10,23 +10,23 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsFilter _filter;
         private EcsPool<Standing> _standingPool;
         private EcsPool<Moving> _movingPool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
+        private EcsPool<PhysicalBody> _physicalBodyPool;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<ObjectRigidbody>().End();
+            _filter = _world.Filter<PhysicalBody>().End();
             _standingPool = _world.GetPool<Standing>();
             _movingPool = _world.GetPool<Moving>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
+            _physicalBodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _filter)
             {
-                ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
-                if (objectRigidbody.Velocity.magnitude > 0)
+                ref var objectRigidbody = ref _physicalBodyPool.Get(entity);
+                if (objectRigidbody.Velocity.magnitude > 0.1f)
                 {
                     if (_standingPool.Has(entity))
                     {

@@ -9,16 +9,16 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsWorld _world;
         private EcsFilter _playerFilter;
         private EcsFilter _enemyFilter;
-        private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<FollowTarget> _followPool;
+        private EcsPool<PhysicalBody> _physicalBodyPool;
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _playerFilter = _world.Filter<ObjectTransform>().Inc<PlayerTag>().End();
+            _playerFilter = _world.Filter<PhysicalBody>().Inc<PlayerTag>().End();
             _enemyFilter = _world.Filter<FollowTarget>().Inc<EnemyTag>().End();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
             _followPool = _world.GetPool<FollowTarget>();
+            _physicalBodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)
@@ -28,8 +28,8 @@ namespace _Project.Scripts.Ecs.Systems
                 foreach (var enemyEntity in _enemyFilter)
                 {
                     ref var followTarget = ref _followPool.Get(enemyEntity);
-                    var playerTransform = _objectTransformPool.Get(playerEntity);
-                    followTarget.TargetPosition = playerTransform.Position;
+                    var physicalBody = _physicalBodyPool.Get(playerEntity);
+                    followTarget.TargetPosition = physicalBody.Position;
                 }
             }
         }

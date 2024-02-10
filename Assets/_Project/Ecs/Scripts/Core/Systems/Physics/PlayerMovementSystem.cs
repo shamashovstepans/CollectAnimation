@@ -13,7 +13,7 @@ namespace _Project.Scripts.Ecs.Systems
         private EcsWorld _world;
         private EcsFilter _filter;
         private EcsPool<PlayerInput> _playerInputPool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
+        private EcsPool<PhysicalBody> _objectRigidbodyPool;
 
         public PlayerMovementSystem(PlayerMovementConfig config)
         {
@@ -23,9 +23,9 @@ namespace _Project.Scripts.Ecs.Systems
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<PlayerInput>().Inc<ObjectRigidbody>().End();
+            _filter = _world.Filter<PlayerInput>().Inc<PhysicalBody>().End();
             _playerInputPool = _world.GetPool<PlayerInput>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
+            _objectRigidbodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)

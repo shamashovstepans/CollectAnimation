@@ -19,8 +19,6 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         private EcsWorld _world;
         private EcsFilter _shootingFilter;
         private EcsPool<Shooting> _shootingPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<Projectile> _projectilePool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<Target> _targetPool;
@@ -35,10 +33,8 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _shootingFilter = _world.Filter<Shooting>().Inc<ObjectTransform>().Inc<Target>().End();
+            _shootingFilter = _world.Filter<Shooting>().Inc<PhysicalBody>().Inc<Target>().End();
             _shootingPool = _world.GetPool<Shooting>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
             _projectilePool = _world.GetPool<Projectile>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _targetPool = _world.GetPool<Target>();
@@ -71,7 +67,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
 
                 shooting.CooldownTimer = _config.Cooldown;
 
-                var shootingTransform = _objectTransformPool.Get(shootingEntity);
+                var shootingTransform = _physicalBodyPool.Get(shootingEntity);
 
                 var projectileEntity = _world.NewEntity();
 
@@ -79,21 +75,18 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 projectile.SpawnerEntity = shootingEntityPacked;
                 projectile.Damage = _config.Damage;
 
-                var targetPhysicalBody = _objectRigidbodyPool.Get(targetEntity);
+                var targetPhysicalBody = _physicalBodyPool.Get(targetEntity);
 
                 var startPosition = shootingTransform.Position + _config.BulletSpawnOffset;
+                var endPosition = targetPhysicalBody.Position + _config.BulletSpawnOffset;
 
-                // ref var projectileRigidbody = ref _objectRigidbodyPool.Add(projectileEntity);
-                var velocity = GetLaunchVelocity(startPosition, targetPhysicalBody.Position, _config.LaunchAngle);
-                Debug.Log(velocity);
-                // projectileRigidbody.Position = startPosition;
-                // projectileRigidbody.Velocity = velocity;
+                var velocity = GetLaunchVelocity(startPosition, endPosition, _config.LaunchAngle);
 
                 var projectileView = _viewFactory.Create<IEcsPhysicalBodyView>(projectileEntity, ViewConst.Projectile, startPosition, Quaternion.identity, _worldView.BulletsParent);
 
                 ref var projectilePhysicalBody = ref _physicalBodyPool.Add(projectileEntity);
                 projectilePhysicalBody.View = projectileView;
-                projectilePhysicalBody.View.SetVelocity(velocity);
+                projectilePhysicalBody.Velocity = velocity;
             }
         }
 
@@ -103,18 +96,14 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
             var targetXZPos = new Vector3(endPosition.x, 0.0f, endPosition.z);
             var rotation = Quaternion.LookRotation(targetXZPos - projectileXZPos);
 
-            // shorthands for the formula
             var R = Vector3.Distance(projectileXZPos, targetXZPos);
             var G = UnityEngine.Physics.gravity.y;
             var tanAlpha = Mathf.Tan(launchAngle * Mathf.Deg2Rad);
             var H = endPosition.y - startPosition.y;
 
-            // calculate the local space components of the velocity 
-            // required to land the projectile on the target object 
             var Vz = Mathf.Sqrt(G * R * R / (2.0f * (H - R * tanAlpha)));
             var Vy = tanAlpha * Vz;
 
-            // create the velocity vector in local space and get it in global space
             var velocity = rotation * new Vector3(0f, Vy, Vz);
 
             return velocity;

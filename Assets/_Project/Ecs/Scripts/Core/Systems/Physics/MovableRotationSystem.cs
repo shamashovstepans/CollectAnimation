@@ -12,7 +12,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
 
         private EcsWorld _world;
         private EcsFilter _filter;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
+        private EcsPool<PhysicalBody> _objectRigidbodyPool;
 
         public MovableRotationSystem(RotationConfig rotationConfig)
         {
@@ -22,8 +22,8 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<ObjectRigidbody>().Inc<ObjectTransform>().Inc<Moving>().End();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
+            _filter = _world.Filter<PhysicalBody>().Inc<Moving>().End();
+            _objectRigidbodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)
@@ -33,7 +33,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
 
                 var velocity = objectRigidbody.Velocity;
-                if (velocity.sqrMagnitude > 0)
+                if (velocity.magnitude > 0.1f)
                 {
                     objectRigidbody.Rotation = Quaternion.Lerp(objectRigidbody.Rotation, Quaternion.LookRotation(velocity), Time.deltaTime * _rotationConfig.RotationSpeed);
                 }

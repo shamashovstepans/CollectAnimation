@@ -29,12 +29,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
             {
                 var collisionEvent = _onTriggerEnterPool.Get(collisionEntity);
                 var targetEntity = collisionEvent.collider.gameObject.GetComponentInParent<IView>();
-                
-                if (collisionEvent.senderGameObject == null)
-                {
-                    continue;
-                }
-                
+
                 var senderEntity = collisionEvent.senderGameObject.GetComponentInParent<IView>();
 
                 if (targetEntity == null || senderEntity == null)
@@ -59,7 +54,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
                 projectileHit.TargetEntity = _world.PackEntity(targetEntity.EntityId);
                 projectileHit.ProjectileEntity = _world.PackEntity(senderEntity.EntityId);
                 
-                collisionEvent.collider.gameObject.SetActive(false);
+                collisionEvent.senderGameObject.gameObject.SetActive(false);
             }
         }
     }

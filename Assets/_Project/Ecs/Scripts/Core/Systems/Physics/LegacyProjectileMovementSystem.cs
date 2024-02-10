@@ -2,23 +2,19 @@ using _Project.Ecs.Scripts.Core.Components;
 using _Project.Scripts.Ecs.Components;
 using _Project.Scripts.Ecs.Configs;
 using _Project.Scripts.Ecs.Core.Common;
-using DG.Tweening;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace _Project.Ecs.Scripts.Core.Systems.Core
 {
-    internal class ParabolicProjectileMovementSystem : IEcsInitSystem, IEcsPhysicsRunSystem
+    internal class LegacyProjectileMovementSystem : IEcsInitSystem, IEcsPhysicsRunSystem
     {
         private readonly ShootingConfig _shootingConfig;
         private EcsWorld _world;
         private EcsFilter _projectileFilter;
         private EcsPool<Projectile> _projectilePool;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<Target> _targetPool;
 
-        public ParabolicProjectileMovementSystem(ShootingConfig shootingConfig)
+        public LegacyProjectileMovementSystem(ShootingConfig shootingConfig)
         {
             _shootingConfig = shootingConfig;
         }
@@ -26,10 +22,8 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _projectileFilter = _world.Filter<Projectile>().Inc<Target>().Inc<ObjectRigidbody>().Inc<ObjectTransform>().End();
+            _projectileFilter = _world.Filter<Projectile>().Inc<Target>().Inc<PhysicalBody>().End();
             _projectilePool = _world.GetPool<Projectile>();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
             _targetPool = _world.GetPool<Target>();
         }
 

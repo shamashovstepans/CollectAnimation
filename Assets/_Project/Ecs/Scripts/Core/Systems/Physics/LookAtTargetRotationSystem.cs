@@ -12,8 +12,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
 
         private EcsWorld _world;
         private EcsFilter _filter;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
+        private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<Target> _targetPool;
 
         public LookAtTargetRotationSystem(RotationConfig rotationConfig)
@@ -24,17 +23,16 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<ObjectRigidbody>().Inc<Target>().Inc<Standing>().End();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
+            _filter = _world.Filter<PhysicalBody>().Inc<Target>().Inc<Standing>().End();
             _targetPool = _world.GetPool<Target>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
+            _physicalBodyPool = _world.GetPool<PhysicalBody>();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _filter)
             {
-                ref var objectRigidbody = ref _objectRigidbodyPool.Get(entity);
+                ref var objectRigidbody = ref _physicalBodyPool.Get(entity);
                 var target = _targetPool.Get(entity);
 
                 if (!target.TargetEntityPacked.Unpack(_world, out var targetEntity))
@@ -42,7 +40,7 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                     continue;
                 }
 
-                var targetTransform = _objectTransformPool.Get(targetEntity);
+                var targetTransform = _physicalBodyPool.Get(targetEntity);
 
                 var direction = targetTransform.Position - objectRigidbody.Position;
                 if (direction != Vector3.zero)

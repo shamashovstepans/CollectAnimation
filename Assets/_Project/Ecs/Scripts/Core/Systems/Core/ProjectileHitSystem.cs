@@ -52,7 +52,6 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
                 ref var health = ref _healthPool.Get(targetEntity);
                 health.Value -= projectile.Damage;
 
-                _clearPool.Add(targetEntity);
                 _clearPool.Add(hit);
                 if (!_clearPool.Has(projectileEntity))
                 {

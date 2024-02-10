@@ -16,10 +16,8 @@ namespace _Project.Scripts.Ecs.Systems
         private readonly IViewFactory _viewFactory;
 
         private EcsWorld _world;
-        private EcsPool<ObjectRigidbody> _objectRigidbodyPool;
         private EcsPool<PhysicalBody> _physicalBodyPool;
         private EcsPool<PlayerInput> _playerInputPool;
-        private EcsPool<ObjectTransform> _objectTransformPool;
         private EcsPool<PlayerTag> _playerTagPool;
         private EcsPool<Health> _healthPool;
         private EcsPool<FindTarget> _findTargetPool;
@@ -37,10 +35,8 @@ namespace _Project.Scripts.Ecs.Systems
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _objectRigidbodyPool = _world.GetPool<ObjectRigidbody>();
             _physicalBodyPool = _world.GetPool<PhysicalBody>();
             _playerInputPool = _world.GetPool<PlayerInput>();
-            _objectTransformPool = _world.GetPool<ObjectTransform>();
             _playerTagPool = _world.GetPool<PlayerTag>();
             _healthPool = _world.GetPool<Health>();
             _findTargetPool = _world.GetPool<FindTarget>();
@@ -51,8 +47,6 @@ namespace _Project.Scripts.Ecs.Systems
             var playerView = _viewFactory.Create<IEcsPhysicalBodyView>(entity, ViewConst.Player, Vector3.zero, Quaternion.identity, _worldView.Transform);
             physicalBody.View = playerView;
 
-            _objectTransformPool.Add(entity);
-            _objectRigidbodyPool.Add(entity);
             _playerInputPool.Add(entity);
             _playerTagPool.Add(entity);
             _findTargetPool.Add(entity);
