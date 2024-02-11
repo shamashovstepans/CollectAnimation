@@ -3,6 +3,7 @@ using _Project.Scripts.Ecs.Core.Common;
 using _Project.Scripts.Ecs.Dependencies;
 using LeoEcsPhysics;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace _Project.Ecs.Scripts.Core.Systems.Physics
 {
@@ -28,12 +29,12 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
             foreach (var collisionEntity in _collisionFilter)
             {
                 var collisionEvent = _onTriggerEnterPool.Get(collisionEntity);
-                
+
                 if (collisionEvent.collider == null || collisionEvent.senderGameObject == null)
                 {
                     continue;
                 }
-                
+
                 var targetEntity = collisionEvent.collider.gameObject.GetComponentInParent<IView>();
                 var senderEntity = collisionEvent.senderGameObject.GetComponentInParent<IView>();
 
@@ -54,12 +55,13 @@ namespace _Project.Ecs.Scripts.Core.Systems.Physics
                     continue;
                 }
 
+                collisionEvent.senderGameObject.gameObject.SetActive(false);
+
                 var projectileHitEntity = _world.NewEntity();
                 ref var projectileHit = ref _projectileHitPool.Add(projectileHitEntity);
                 projectileHit.TargetEntity = _world.PackEntity(targetEntity.EntityId);
                 projectileHit.ProjectileEntity = _world.PackEntity(senderEntity.EntityId);
-                
-                collisionEvent.senderGameObject.gameObject.SetActive(false);
+
             }
         }
     }

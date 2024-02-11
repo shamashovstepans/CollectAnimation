@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f4a9de189343dbb0da055bd049a70c, type: 3}
   m_Name: BallisticProjectileMovementConfig
   m_EditorClassIdentifier: 
-  _maxHeight: 3
-  _speed: 10
+  _maxHeight: 4

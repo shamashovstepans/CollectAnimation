@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b4409cda504a399bd5f6f183a71599, type: 3}
   m_Name: FollowTargetConfig
   m_EditorClassIdentifier: 
-  _followSpeed: 1
+  _followSpeed: 3.09

@@ -67,17 +67,20 @@ namespace _Project.Ecs.Scripts.Core.Systems.Core
 
                 shooting.CooldownTimer = _config.Cooldown;
                 
+                var shootingTransform = _physicalBodyPool.Get(shootingEntity);
+                var startPosition = shootingTransform.Position + _config.BulletSpawnOffset;
+                
                 var projectileEntity = _world.NewEntity();
 
                 ref var projectile = ref _projectilePool.Add(projectileEntity);
                 projectile.SpawnerEntity = shootingEntityPacked;
                 projectile.Damage = _config.Damage;
+                projectile.StartPosition = startPosition;
                 
                 ref var target = ref _targetPool.Add(projectileEntity);
                 target.TargetEntityPacked = targetEntityPacked;
 
-                var shootingTransform = _physicalBodyPool.Get(shootingEntity);
-                var startPosition = shootingTransform.Position + _config.BulletSpawnOffset;
+                
                 var projectileView = _viewFactory.Create<IEcsPhysicalBodyView>(projectileEntity, ViewConst.Projectile, startPosition, Quaternion.identity, _worldView.BulletsParent);
 
                 ref var projectilePhysicalBody = ref _physicalBodyPool.Add(projectileEntity);
